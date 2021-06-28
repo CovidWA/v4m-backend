@@ -18,9 +18,7 @@
     {
       "type": "sendGrid",
       "name": "message",
-      "direction": "out",
-      "from": "info@vaccinatefor.me",
-      "to": "grigorenkod@gmail.com"
+      "direction": "out"
     } 
   ],
   "scriptFile": "../dist/SendEmail/index.js"
