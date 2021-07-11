@@ -16,17 +16,21 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
 
     if (!(validateEmail(recipient_email) && recipient_name && sender_name && validateEmail(sender_email))) {
         context.bindings.res = {
-            status: 302,
-            location: `https://www.vaccinatefor.me/error&recipient_email=${recipient_email}&recipient_name=${recipient_name}&sender_name=${sender_name}&sender_email=${sender_email}`,
-            body: 'Please navigate to <a href="https://www.vaccinatefor.me/error">https://www.vaccinatefor.me/error</a>',
+            status: 400,
+            headers: {
+                'content-type':'application/json',
+            },
+            body: { status: "Error" },
         };
         return;   
     }
 
     context.bindings.res = {
-        status: 302,
-        location: "https://www.vaccinatefor.me/thank-you",
-        body: 'Please navigate to <a href="https://www.vaccinatefor.me/thank-you">https://www.vaccinatefor.me/thank-you</a>',
+        status: 200,        
+        headers: {
+            'content-type':'application/json',
+        },
+        body: { status: "OK" },
     };
 
     context.bindings.message = {
@@ -42,6 +46,7 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
                 {            
                     first_name: recipient_name,
                     sender_name: sender_name,
+                    sender_email: sender_email,
                 },
             },
         ],
@@ -49,10 +54,6 @@ const httpTrigger: AzureFunction = async function (context: Context, req: HttpRe
         from: {
             email: "info@vaccinatefor.me",
             name: "Vaccinate For Me",
-        },
-        reply_to: {
-            email: sender_email,
-            name: sender_name,
         }
     };
     
